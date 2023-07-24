@@ -1,0 +1,25 @@
+name: release
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: The version to use
+        required: true
+        default: "1.0.0"
+        type: text
+  pull_request:
+    types: [closed]
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+    steps:
+      - uses: nearform-actions/optic-release-automation-action@ollyjohn:main
+        with:
+          semver: ${{ github.event.inputs.version }}
+          commit-message: "chore: release {version}"
+          build-command: npm ci
